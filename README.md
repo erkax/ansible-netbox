@@ -106,47 +106,47 @@ Example Playbook
 
 Example using geerlingguy apache and postgresql to configure netbox
 
----
-- hosts: all
-  become: true
-  vars_files:
-    - vars/infra-tools.yml
-  vars:
-    netbox_allowed_hosts: "'{{ ansible_fqdn }}'"
-    netbox_db_name: "netbox"
-    netbox_db_user: "netbox"
-    netbox_db_password: "ahwi@wohw5baNiet0iewae$Sh"
-    netbox_secret_key: "epha0hee5Ciake7EiYaech5ree1Woh2oung6thiephaeZahGoh"
-    netbox_from_email: "netbox.noreply@example.net"
-    postgresql_databases:
-      - name: netbox
-        state: present
-    postgresql_users:
-      - name: "{{ netbox_db_user }}"
-        password: "{{ netbox_db_password }}"
-        db: "{{ netbox_db_name }}"
-        role_attr_flags: NOSUPERUSER
+	---
+	- hosts: all
+	  become: true
+	  vars_files:
+		- vars/infra-tools.yml
+	  vars:
+		netbox_allowed_hosts: "'{{ ansible_fqdn }}'"
+		netbox_db_name: "netbox"
+		netbox_db_user: "netbox"
+		netbox_db_password: "ahwi@wohw5baNiet0iewae$Sh"
+		netbox_secret_key: "epha0hee5Ciake7EiYaech5ree1Woh2oung6thiephaeZahGoh"
+		netbox_from_email: "netbox.noreply@example.net"
+		postgresql_databases:
+		  - name: netbox
+			state: present
+		postgresql_users:
+		  - name: "{{ netbox_db_user }}"
+			password: "{{ netbox_db_password }}"
+			db: "{{ netbox_db_name }}"
+			role_attr_flags: NOSUPERUSER
 
-    apache_vhosts_version: 2.4
-         
+		apache_vhosts_version: 2.4
+			 
 
-    apache_vhosts:
-      - servername: "{{ansible_fqdn}}"
-        documentroot: "/var/www/html"
-        extra_parameters: |
-          Alias /static /opt/netbox/netbox/static
-          ProxyPreserveHost On
-          <Location /static>
-            ProxyPass !
-          </Location>
-          ProxyPass / http://127.0.0.1:8001/
-          ProxyPassReverse / http://127.0.0.1:8001/
+		apache_vhosts:
+		  - servername: "{{ansible_fqdn}}"
+			documentroot: "/var/www/html"
+			extra_parameters: |
+			  Alias /static /opt/netbox/netbox/static
+			  ProxyPreserveHost On
+			  <Location /static>
+				ProxyPass !
+			  </Location>
+			  ProxyPass / http://127.0.0.1:8001/
+			  ProxyPassReverse / http://127.0.0.1:8001/
 
-  roles:
-    - { role: geerlingguy.repo-epel }
-    - { role: geerlingguy.postgresql }
-    - { role: geerlingguy.apache }
-    - { role: erkax.netbox }
+	  roles:
+		- { role: geerlingguy.repo-epel }
+		- { role: geerlingguy.postgresql }
+		- { role: geerlingguy.apache }
+		- { role: erkax.netbox }
 
 
 License
