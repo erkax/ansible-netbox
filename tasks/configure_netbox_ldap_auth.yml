@@ -1,0 +1,12 @@
+#only if ldap auth is required
+- name: install openldap-devel lib for netbox virtualenv
+  yum: name="openldap-devel"
+
+- name: install django ldap lib
+  pip:
+    virtualenv="{{netbox_app_dir}}/venv"
+    name="django-auth-ldap"
+
+- name: create netbox ldap config file
+  template: src="netbox/netbox/ldap_config.py.jinja2"
+          dest="{{netbox_app_dir}}/netbox/netbox/ldap_config.py"

@@ -1,0 +1,12 @@
+[Unit]
+Description=Netbox gunicorn daemon
+After=network.target
+
+[Service]
+User={{ netbox_user }}
+Group={{ netbox_user }}
+WorkingDirectory={{ netbox_app_dir }}
+ExecStart={{ netbox_app_dir }}/venv/bin/gunicorn -c {{ netbox_app_dir }}/gunicorn_config.py netbox.wsgi
+
+[Install]
+WantedBy=multi-user.target

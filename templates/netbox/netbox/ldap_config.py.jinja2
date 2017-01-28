@@ -1,0 +1,14 @@
+import ldap
+
+# Server URI
+AUTH_LDAP_SERVER_URI = "{{ netbox_ldap_srv_uri }}"
+
+# Set the DN and password for the NetBox service account.
+AUTH_LDAP_BIND_DN = "{{ netbox_ldap_bind_dn }}"
+AUTH_LDAP_BIND_PASSWORD = "{{ netbox_ldap_bind_password }}"
+AUTH_LDAP_USER_DN_TEMPLATE = "{{ netbox_ldap_user_search }}"
+
+# Include this setting if you want to ignore certificate errors. This might be needed to accept a self-signed cert.
+# Note that this is a NetBox-specific setting which sets:
+#     ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
+LDAP_IGNORE_CERT_ERRORS = True

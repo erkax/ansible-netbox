@@ -1,0 +1,24 @@
+####
+- name: redefine netbox ownership static directory
+  file: path={{netbox_app_dir}}
+        state=directory
+        owner={{netbox_user}}
+        group={{netbox_user}}
+        recurse=yes
+  tags: install, update
+
+- name: redefine selinux type for the netbox static directory (and sub-dir)
+  file: path={{netbox_app_dir}}/netbox/static
+        state=directory
+        owner={{netbox_user}}
+        group={{netbox_httpd_user_group}}
+        recurse=yes
+        setype=httpd_sys_rw_content_t
+  tags: install, update
+####
+# allow httpd tagged process to connect to another server (proxy in this case)
+- name: set httpd_can_network_connect selinux boolean
+  seboolean: name=httpd_can_network_connect
+             state=yes
+             persistent=yes
+  tags: install, update

@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Erkax
+  description: Netbox 1.8.3 for Redhat7 - CentOS7
+  company: your company (optional)
+  license: "license (BSD, MIT)"
+  min_ansible_version: 1.9
+  platforms:
+    - name: EL
+      versions:
+      - all
+  galaxy_tags:
+    - web

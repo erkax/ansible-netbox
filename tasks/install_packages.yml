@@ -1,0 +1,18 @@
+
+---
+# let's install the required packages for netbox
+- name: install packages required by netbox
+  yum: name={{item}}  state=present
+  with_flattened:
+    - gcc
+    - python2
+    - python-virtualenv
+    - python-devel
+    - python-pip
+    - libxml2-devel
+    - libxslt-devel
+    - libffi-devel
+    - graphviz
+    - openssl-devel
+    - git
+    - postgresql-devel

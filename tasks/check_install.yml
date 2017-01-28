@@ -1,0 +1,9 @@
+   - name: check if netbox app directory exist
+     stat: path={{netbox_app_dir}}
+     register: check_netbox_app_dir
+
+   - name:
+     assert:
+       msg: "Netbox is already installed" 
+       that:
+         - not check_netbox_app_dir.stat.exists

@@ -1,0 +1,87 @@
+################################################################################
+- name: add sys user netbox (will run netbox through gunicorn)
+  user: name={{netbox_user}}
+        system=yes
+        state=present
+        home={{netbox_app_dir}}
+        createhome=no
+
+################################################################################
+- name: Clone netbox git repository
+  git: repo=https://github.com/digitalocean/netbox.git
+       dest={{netbox_app_dir}}
+       version=master
+################################################################################
+- name: create virtualenv and update pip
+  pip:
+    virtualenv='{{netbox_app_dir}}/venv'
+    name='pip'
+    state=latest
+
+################################################################################
+- name: create virtualenv and install requirements
+  pip:
+    virtualenv='{{netbox_app_dir}}/venv'
+    requirements='{{netbox_app_dir}}/requirements.txt'
+
+- name: install gunicorn
+  pip:
+    virtualenv='{{netbox_app_dir}}/venv'
+    name='gunicorn'
+
+################################################################################
+- name: create netbox config file
+  template: src='netbox/netbox/configuration.py.jinja2'
+          dest='{{netbox_app_dir}}/netbox/netbox/configuration.py'
+
+################################################################################
+- name: create gunicorn config file
+  template: src='gunicorn_config.py.jinja2'
+          dest='{{netbox_app_dir}}/gunicorn_config.py'
+
+################################################################################
+- name: load default schema
+  environment:
+    VIRTUAL_ENV: '{{netbox_app_dir}}/venv'
+    PATH: '{{netbox_app_dir}}/venv/bin'
+  shell: ./manage.py  migrate
+  args:
+    chdir: '{{netbox_app_dir}}/netbox'
+
+################################################################################
+- name: Create superuser account
+  environment:
+    VIRTUAL_ENV: '{{netbox_app_dir}}/venv'
+    PATH: '{{netbox_app_dir}}/venv/bin'
+    SUPERUSER_NAME: '{{ netbox_admin }}'
+    SUPERUSER_EMAIL: '{{ netbox_admin_email }}'
+    SUPERUSER_PASSWORD: '{{ netbox_admin_password }}'
+  shell:  echo "from django.contrib.auth.models import User;
+               User.objects.create_superuser('${SUPERUSER_NAME}',
+               '${SUPERUSER_EMAIL}', '${SUPERUSER_PASSWORD}')"
+         | ./manage.py shell
+  args:
+    chdir: '{{netbox_app_dir}}/netbox'
+
+################################################################################
+- name: load default data
+  environment:
+    VIRTUAL_ENV: '{{netbox_app_dir}}/venv'
+    PATH: '{{netbox_app_dir}}/venv/bin'
+  shell: ./manage.py  loaddata initial_data
+  args:
+    chdir: '{{netbox_app_dir}}/netbox'
+
+################################################################################
+- name: collect static asset
+  environment:
+    VIRTUAL_ENV: '{{netbox_app_dir}}/venv'
+    PATH: '{{netbox_app_dir}}/venv/bin'
+  shell: ./manage.py  collectstatic --no-input
+  args:
+    chdir: '{{netbox_app_dir}}/netbox'
+
+################################################################################
+- name: create netbox gunicorn systemd unit
+  template: src='netbox-gunicorn.service.jinja2'
+          dest='/etc/systemd/system/netbox-gunicorn.service'

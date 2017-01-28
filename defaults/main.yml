@@ -1,0 +1,12 @@
+---
+# defaults file for erkax.netbox
+netbox_app_dir: "/opt/netbox"
+netbox_user: "netbox"
+netbox_admin: "admin"
+netbox_gunicorn_bind_addr: "0.0.0.0"
+netbox_gunicorn_bind_port: "8001"
+netbox_gunicorn_workers: "3"
+netbox_httpd_user_group: "apache"
+netbox_login_required: False
+netbox_smtp_server: "localhost"
+netbox_from_email: "{{ netbox_user }}@{{ ansible_fqdn }}"

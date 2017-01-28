@@ -1,0 +1,19 @@
+---
+# tasks file for erkax.netbox
+
+- include: check_install.yml
+- include: install_packages.yml
+- include: configure_netbox.yml
+- include: configure_netbox_ldap_auth.yml
+  when:
+    - netbox_ldap_srv_uri is defined
+    - netbox_ldap_bind_dn is defined
+    - netbox_ldap_bind_password is defined
+    - netbox_ldap_user_search is defined
+- include: security.yml
+
+- name: restart netbox
+  service:
+    name: "netbox-gunicorn"
+    enabled: "yes"
+    state: "started"

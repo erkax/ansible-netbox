@@ -28,9 +28,15 @@ Default unix user running Netbox through gunicorn
 
 
 	netbox_admin: "admin"
+	
 
 Netbox admin user name (web admin)
 
+	netbox_admin_password
+	netbox_admin_email
+
+the netbox_admin_password is not in the defaults var because you must
+define your own password! So don't forget to set a strong password. 
 
 	netbox_gunicorn_bind_addr: "0.0.0.0"
 	netbox_gunicorn_bind_port: "8001"
@@ -118,6 +124,9 @@ Example using geerlingguy apache and postgresql to configure netbox
 		netbox_db_password: "ahwi@wohw5baNiet0iewae$Sh"
 		netbox_secret_key: "epha0hee5Ciake7EiYaech5ree1Woh2oung6thiephaeZahGoh"
 		netbox_from_email: "netbox.noreply@example.net"
+		netbox_admin_password: "oqu7Foox@ae1eng0"
+		netbox_admin: "admin"
+		netbox_admin_email: "admin.netbox@example.net"
 		postgresql_databases:
 		  - name: netbox
 			state: present
@@ -128,8 +137,6 @@ Example using geerlingguy apache and postgresql to configure netbox
 			role_attr_flags: NOSUPERUSER
 
 		apache_vhosts_version: 2.4
-			 
-
 		apache_vhosts:
 		  - servername: "{{ansible_fqdn}}"
 			documentroot: "/var/www/html"

@@ -1,0 +1,5 @@
+command = '{{ netbox_app_dir }}/venv/bin/gunicorn'
+pythonpath = '{{ netbox_app_dir }}/netbox'
+bind = '{{ netbox_gunicorn_bind_addr }}:{{ netbox_gunicorn_bind_port }}'
+workers = {{ netbox_gunicorn_workers }}
+user = '{{ netbox_user }}'
