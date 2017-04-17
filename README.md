@@ -27,8 +27,11 @@ the default destination for netbox install
 Default unix user running Netbox through gunicorn
 
 
+	netbox_git_version
+
+Version of netbox we want to install (based on the git repo) default is master
+
 	netbox_admin: "admin"
-	
 
 Netbox admin user name (web admin)
 

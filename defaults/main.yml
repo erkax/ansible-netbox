@@ -10,3 +10,4 @@ netbox_httpd_user_group: "apache"
 netbox_login_required: False
 netbox_smtp_server: "localhost"
 netbox_from_email: "{{ netbox_user }}@{{ ansible_fqdn }}"
+netbox_git_version: "master"
